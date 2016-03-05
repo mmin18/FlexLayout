@@ -971,6 +971,8 @@ public class FlexLayout extends ViewGroup {
 					} else if (c == '/' && dimenSlash == -1) {
 						dimenSlash = dimen.length();
 						dimen.append(c);
+					} else if (c == ':' && "@android".equals(dimen.toString())) {
+						dimen.append(c);
 					} else {
 						return parseDimen(ctx, dimen, dimenSlash);
 					}
