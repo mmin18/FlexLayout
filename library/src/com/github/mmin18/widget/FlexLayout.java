@@ -645,6 +645,10 @@ public class FlexLayout extends ViewGroup {
 	// !
 	// * / %
 	// + -
+	// < <= > >=
+	// == !=
+	// &&
+	// ||
 	// ?:
 
 	static final Operator MUL = new Operator("*", 8, Operator.ASSOC_LEFT, 2, 0) {
@@ -694,6 +698,86 @@ public class FlexLayout extends ViewGroup {
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
 			if (a == a) {
 				return a == 0 ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator CP_LT = new Operator("<", 6, Operator.ASSOC_LEFT, 2, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a && b == b) {
+				return a < b ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator CP_LT_EQ = new Operator("<=", 6, Operator.ASSOC_LEFT, 2, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a && b == b) {
+				return a <= b ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator CP_GT = new Operator(">", 6, Operator.ASSOC_LEFT, 2, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a && b == b) {
+				return a > b ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator CP_GT_EQ = new Operator(">=", 6, Operator.ASSOC_LEFT, 2, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a && b == b) {
+				return a >= b ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator CP_EQ = new Operator("==", 5, Operator.ASSOC_LEFT, 2, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a && b == b) {
+				return a == b ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator CP_NOT_EQ = new Operator("!=", 5, Operator.ASSOC_LEFT, 2, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a && b == b) {
+				return a != b ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator LOG_AND = new Operator("&&", 4, Operator.ASSOC_LEFT, 2, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a && b == b) {
+				return a != 0 && b != 0 ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator LOG_OR = new Operator("||", 3, Operator.ASSOC_LEFT, 2, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a && b == b) {
+				return a != 0 || b != 0 ? 1 : 0;
 			} else {
 				return Float.NaN;
 			}
@@ -807,20 +891,22 @@ public class FlexLayout extends ViewGroup {
 			return (float) Math.pow(a, b);
 		}
 	};
-	public static final Operator X_COND1 = new Operator("?", 2, Operator.ASSOC_LEFT, 2, 0) {
+	public static final Operator X_COND1 = new Operator("?", 2, Operator.ASSOC_RIGHT, 1, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
-			return Float.NaN;
+			return a;
 		}
 	};
-	public static final Operator X_COND2 = new Operator(":", 1, Operator.ASSOC_LEFT, 2, 0) {
+	public static final Operator X_COND2 = new Operator(":", 1, Operator.ASSOC_LEFT, 3, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
 			return Float.NaN;
 		}
 	};
 
-	static Operator[] OPS = new Operator[]{ADD, SUB, DIV, MUL, PERC, NOT, BL, BR, COMMA,
+	static Operator[] OPS = new Operator[]{ADD, SUB, DIV, MUL, PERC, NOT,
+			CP_LT, CP_LT_EQ, CP_GT, CP_GT_EQ, CP_EQ, CP_NOT_EQ, LOG_AND, LOG_OR,
+			BL, BR, COMMA,
 			U_SP, U_DP, U_DIP, U_PX, U_PT, U_MM, U_IN,
 			F_MAX, F_MIN, F_ROUND, F_CEIL, F_FLOOR, F_ABS, F_MOD, F_POW,
 			X_COND1, X_COND2};
@@ -1208,7 +1294,6 @@ public class FlexLayout extends ViewGroup {
 		public float eval(FlexLayout fl, int index, int xy) {
 			float[] stack = new float[list.size()];
 			int sn = 0;
-			float xqs = Float.NaN;
 
 			for (Object obj : list) {
 				if (obj instanceof Operator) {
@@ -1223,24 +1308,16 @@ public class FlexLayout extends ViewGroup {
 					} else if (op.argc == 2) {
 						b = stack[--sn];
 						a = stack[--sn];
-						if (op == X_COND1) {
-							if (xqs == xqs) {
-								throw new RuntimeException("nested a?b:c expression is not allowed");
-							} else {
-								stack[sn++] = b;
-								xqs = a;
-								continue;
-							}
-						} else if (op == X_COND2) {
-							if (xqs == xqs) {
-								stack[sn++] = xqs == 0 ? b : a;
-								xqs = Float.NaN;
-							} else {
-								stack[sn++] = Float.NaN;
-							}
+					} else {
+						if (op == X_COND2) {
+							// a?b:c special case, maybe a better solution?
+							b = stack[--sn];
+							a = stack[--sn];
+							float cond = stack[--sn];
+							float c = cond == cond ? (cond != 0 ? a : b) : Float.NaN;
+							stack[sn++] = c;
 							continue;
 						}
-					} else {
 						throw new RuntimeException("argc>2 not supported");
 					}
 					float c = op.eval(fl, index, xy, a, b);
