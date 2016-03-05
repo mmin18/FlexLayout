@@ -826,6 +826,7 @@ public class FlexLayout extends ViewGroup {
 		public static final int PROP_HEIGHT = 7;
 		public static final int PROP_VISIBLE = 10;
 		public static final int PROP_GONE = 11;
+		public static final int PROP_TAG = 15;
 
 		public final int target;
 		public final int property;
@@ -910,8 +911,16 @@ public class FlexLayout extends ViewGroup {
 				return view.getVisibility() == View.VISIBLE ? 1 : 0;
 			} else if (property == PROP_GONE) {
 				return view.getVisibility() == View.GONE ? 1 : 0;
+			} else if (property == PROP_TAG) {
+				Object tag = view.getTag();
+				if (tag instanceof Number) {
+					return ((Number) tag).floatValue();
+				} else {
+					return 0;
+				}
+			} else {
+				return Float.NaN;
 			}
-			return Float.NaN;
 		}
 
 	}
@@ -1059,6 +1068,8 @@ public class FlexLayout extends ViewGroup {
 					refP = Ref.PROP_VISIBLE;
 				} else if ("gone".equals(s2)) {
 					refP = Ref.PROP_GONE;
+				} else if ("tag".equals(s2)) {
+					refP = Ref.PROP_TAG;
 				} else {
 					throw new RuntimeException("unknown token " + s2);
 				}
