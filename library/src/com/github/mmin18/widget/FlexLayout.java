@@ -980,6 +980,8 @@ public class FlexLayout extends ViewGroup {
 					} else if (c == '.') {
 						strDig = str.length();
 						str.append(c);
+					} else if (c == ':' && "android".equals(str.toString())) {
+						str.append(c);
 					} else {
 						return parseStr(ctx, str, strDig);
 					}
@@ -1022,8 +1024,12 @@ public class FlexLayout extends ViewGroup {
 				} else if ("screen".equals(s1)) {
 					refT = Ref.TARGET_SCREEN;
 				} else {
-					// TODO: android:text1
-					int id = ctx.getResources().getIdentifier(s1, "id", ctx.getPackageName());
+					int id;
+					if (s1.startsWith("android:")) {
+						id = ctx.getResources().getIdentifier(s1.substring("android:".length()), "id", "android");
+					} else {
+						id = ctx.getResources().getIdentifier(s1, "id", ctx.getPackageName());
+					}
 					if (id == 0) {
 						throw new RuntimeException("unknown identifier " + s1);
 					} else {
@@ -1047,9 +1053,9 @@ public class FlexLayout extends ViewGroup {
 					refP = Ref.PROP_WIDTH;
 				} else if ("height".equals(s2)) {
 					refP = Ref.PROP_HEIGHT;
-				} else if("visible".equals(s2)) {
+				} else if ("visible".equals(s2)) {
 					refP = Ref.PROP_VISIBLE;
-				} else if("gone".equals(s2)) {
+				} else if ("gone".equals(s2)) {
 					refP = Ref.PROP_GONE;
 				} else {
 					throw new RuntimeException("unknown token " + s2);
