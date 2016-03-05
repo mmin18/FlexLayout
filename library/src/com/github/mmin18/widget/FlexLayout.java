@@ -1063,6 +1063,29 @@ public class FlexLayout extends ViewGroup {
 						str = new StringBuilder();
 						str.append(c);
 					} else {
+						// ==, !=, <=, >=, &&, ||
+						char nc = i + 1 < n ? chars[i + 1] : 0;
+						if (nc == '=') {
+							if (c == '=') {
+								i += 2;
+								return CP_EQ;
+							} else if (c == '!') {
+								i += 2;
+								return CP_NOT_EQ;
+							} else if (c == '<') {
+								i += 2;
+								return CP_LT_EQ;
+							} else if (c == '>') {
+								i += 2;
+								return CP_GT_EQ;
+							}
+						} else if (c == '&' && nc == '&') {
+							i += 2;
+							return LOG_AND;
+						} else if (c == '|' && nc == '|') {
+							i += 2;
+							return LOG_OR;
+						}
 						for (Operator op : OPS) {
 							if (op.op.length() == 1 && op.op.charAt(0) == c) {
 								i++;
