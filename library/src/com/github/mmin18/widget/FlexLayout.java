@@ -640,6 +640,13 @@ public class FlexLayout extends ViewGroup {
 
 	}
 
+	// Precedence
+	// () sp dp dip px pt mm in
+	// !
+	// * / %
+	// + -
+	// ?:
+
 	static final Operator MUL = new Operator("*", 8, Operator.ASSOC_LEFT, 2, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
@@ -652,7 +659,7 @@ public class FlexLayout extends ViewGroup {
 			return a / b;
 		}
 	};
-	static final Operator PERC = new Operator("%", 10, Operator.ASSOC_RIGHT, 1, 0) {
+	static final Operator PERC = new Operator("%", 8, Operator.ASSOC_RIGHT, 1, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
 			if (xy == 0) {
@@ -670,16 +677,26 @@ public class FlexLayout extends ViewGroup {
 			}
 		}
 	};
-	static final Operator ADD = new Operator("+", 5, Operator.ASSOC_LEFT, 2, 0) {
+	static final Operator ADD = new Operator("+", 7, Operator.ASSOC_LEFT, 2, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
 			return a + b;
 		}
 	};
-	static final Operator SUB = new Operator("-", 5, Operator.ASSOC_LEFT, 2, 0) {
+	static final Operator SUB = new Operator("-", 7, Operator.ASSOC_LEFT, 2, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
 			return a - b;
+		}
+	};
+	static final Operator NOT = new Operator("!", 9, Operator.ASSOC_RIGHT, 1, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (a == a) {
+				return a == 0 ? 1 : 0;
+			} else {
+				return Float.NaN;
+			}
 		}
 	};
 	static final Operator BL = new Operator("(", 0, 0, 0, 0) {
@@ -790,7 +807,7 @@ public class FlexLayout extends ViewGroup {
 			return (float) Math.pow(a, b);
 		}
 	};
-	public static final Operator X_COND1 = new Operator("?", 9, Operator.ASSOC_LEFT, 2, 0) {
+	public static final Operator X_COND1 = new Operator("?", 2, Operator.ASSOC_LEFT, 2, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
 			return Float.NaN;
@@ -803,7 +820,7 @@ public class FlexLayout extends ViewGroup {
 		}
 	};
 
-	static Operator[] OPS = new Operator[]{ADD, SUB, DIV, MUL, PERC, BL, BR, COMMA,
+	static Operator[] OPS = new Operator[]{ADD, SUB, DIV, MUL, PERC, NOT, BL, BR, COMMA,
 			U_SP, U_DP, U_DIP, U_PX, U_PT, U_MM, U_IN,
 			F_MAX, F_MIN, F_ROUND, F_CEIL, F_FLOOR, F_ABS, F_MOD, F_POW,
 			X_COND1, X_COND2};
