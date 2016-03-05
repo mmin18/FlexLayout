@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="FlexLayout_Layout">
+		<attr name="layout_left" format="string"/>
+		<attr name="layout_right" format="string"/>
+		<attr name="layout_top" format="string"/>
+		<attr name="layout_bottom" format="string"/>
+		<attr name="layout_centerX" format="string"/>
+		<attr name="layout_centerY" format="string"/>
+		<attr name="layout_width2" format="string"/>
+		<attr name="layout_height2" format="string"/>
+	</declare-styleable>
+</resources>
