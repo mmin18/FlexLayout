@@ -1321,11 +1321,13 @@ public class FlexLayout extends ViewGroup {
 							queue.add(stack.pop());
 						}
 					} else {
-						if (!stack.empty()) {
+						while (!stack.empty()) {
 							Operator o2 = stack.peek();
 							if (op.assoc == Operator.ASSOC_LEFT && op.prec <= o2.prec
 									|| op.assoc == Operator.ASSOC_RIGHT && op.prec < o2.prec) {
 								queue.add(stack.pop());
+							} else {
+								break;
 							}
 						}
 						stack.push(op);
