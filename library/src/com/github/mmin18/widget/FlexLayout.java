@@ -69,8 +69,22 @@ public class FlexLayout extends ViewGroup {
 			this.bottom = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_bottom));
 			this.centerX = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_centerX));
 			this.centerY = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_centerY));
-			this.width2 = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_width));
-			this.height2 = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_height));
+			String str = a.getString(R.styleable.FlexLayout_Layout_layout_width);
+			if ("match_parent".equals(str) || "fill_parent".equals(str)) {
+				width = MATCH_PARENT;
+			} else if ("wrap_content".equals(str)) {
+				width = WRAP_CONTENT;
+			} else {
+				this.width2 = RPN.parse(c, str);
+			}
+			str = a.getString(R.styleable.FlexLayout_Layout_layout_height);
+			if ("match_parent".equals(str) || "fill_parent".equals(str)) {
+				height = MATCH_PARENT;
+			} else if ("wrap_content".equals(str)) {
+				height = WRAP_CONTENT;
+			} else {
+				this.height2 = RPN.parse(c, str);
+			}
 			a.recycle();
 		}
 
