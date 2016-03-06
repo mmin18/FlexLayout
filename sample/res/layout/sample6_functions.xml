@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.mmin18.widget.FlexLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="320dp">
+
+	<TextView
+		android:id="@+id/view1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@color/color1"
+		android:gravity="center"
+		android:text="\n@+id/view1\n\nShort text."
+		app:layout_centerY="35%"/>
+
+	<TextView
+		android:id="@+id/view2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@color/color2"
+		android:gravity="center"
+		android:text="\n@+id/view2\n\nThis is a long text."
+		app:layout_centerY="65%"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:background="@color/color3"
+		android:gravity="center"
+		android:text="layout_left=max(view1.right,view2.right)"
+		app:layout_bottom="view2.bottom"
+		app:layout_left="max(view1.right,view2.right)"
+		app:layout_top="view1.top"/>
+
+	<View
+		android:layout_height="1px"
+		android:background="@color/color4"
+		app:layout_bottom="view2.top"
+		app:layout_left="min(view1.right,view2.right)"
+		app:layout_right="max(view1.right,view2.right)"
+		app:layout_top="view1.bottom"/>
+
+</com.github.mmin18.widget.FlexLayout>

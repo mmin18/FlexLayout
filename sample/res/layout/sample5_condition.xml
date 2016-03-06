@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.mmin18.widget.FlexLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="320dp">
+
+	<Button
+		android:id="@+id/sample5_switch"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="sample5Switch"
+		android:text="SHOW/HIDE"
+		app:layout_top="30dp"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:text="onclick() {\n\tView hv = findViewById(R.id.hide_view);\n\thv.setVisibility(hv.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);\n}"
+		android:textSize="11sp"
+		android:typeface="monospace"
+		app:layout_centerY="prev.centerY"
+		app:layout_left="prev.right+20dp"
+		app:layout_right="100%"/>
+
+	<TextView
+		android:id="@+id/hide_view"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@color/color1"
+		android:gravity="center"
+		android:text="\n@+id/hide_view\n"
+		app:layout_bottom="60%"
+		app:layout_centerX="50%"/>
+
+	<View
+		android:background="@color/color5"
+		app:layout_bottom="hide_view.visible?switch1.bottom:switch2.bottom"
+		app:layout_left="hide_view.visible?switch1.left:switch2.left"
+		app:layout_right="hide_view.visible?switch1.right:switch2.right"
+		app:layout_top="hide_view.visible?switch1.top:switch2.top"/>
+
+	<TextView
+		android:id="@+id/switch1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="ON"
+		android:textSize="20sp"
+		app:layout_right="hide_view.centerX"
+		app:layout_top="hide_view.bottom"/>
+
+	<TextView
+		android:id="@+id/switch2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="OFF"
+		android:textSize="20sp"
+		app:layout_left="hide_view.centerX"
+		app:layout_top="hide_view.bottom"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="layout_left=hide_view.visible?switch1.left:switch2.left"
+		app:layout_centerX="50%"
+		app:layout_top="prev.bottom+20dp"/>
+
+</com.github.mmin18.widget.FlexLayout>

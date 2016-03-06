@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.mmin18.widget.FlexLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="320dp">
+
+	<Button
+		android:id="@+id/sample7_inc"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="sample7Inc"
+		android:text="(0) ++"
+		app:layout_top="30dp"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:text="onclick(v) {\n\tv.setTag(((Integer)v.getTag()) + 1);\n\tv.requestLayout();\n}"
+		android:textSize="11sp"
+		android:typeface="monospace"
+		app:layout_centerY="prev.centerY"
+		app:layout_left="prev.right+20dp"
+		app:layout_right="100%"/>
+
+	<View
+		android:layout_height="10dp"
+		android:background="@color/color5"
+		app:layout_centerY="50%"
+		app:layout_width="sample7_inc.tag*20dp+10dp"/>
+
+</com.github.mmin18.widget.FlexLayout>

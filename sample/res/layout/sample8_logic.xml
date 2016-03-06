@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.mmin18.widget.FlexLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="320dp">
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:text="onclick(v) {\n\tv.setTag(!((Boolean)v.getTag()).booleanValue());\n\tv.requestLayout();\n}"
+		android:textSize="11sp"
+		android:typeface="monospace"
+		app:layout_centerX="50%"
+		app:layout_left="20dp"
+		app:layout_top="20dp"/>
+
+	<Button
+		android:id="@+id/sample8_b1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="sample8Switch"
+		android:text="false"
+		app:layout_centerX="25%"
+		app:layout_top="prev.bottom+30dp"/>
+
+	<Button
+		android:id="@+id/sample8_b2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="sample8Switch"
+		android:text="false"
+		app:layout_centerX="50%"
+		app:layout_top="prev.top"/>
+
+	<Button
+		android:id="@+id/sample8_b3"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="sample8Switch"
+		android:text="false"
+		app:layout_centerX="80%"
+		app:layout_top="prev.top"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="("
+		android:textSize="20sp"
+		android:typeface="monospace"
+		app:layout_centerX="12.5%"
+		app:layout_centerY="prev.centerY"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="||"
+		android:textSize="20sp"
+		android:typeface="monospace"
+		app:layout_centerX="37.5%"
+		app:layout_centerY="prev.centerY"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text=") &amp;&amp;"
+		android:textSize="20sp"
+		android:typeface="monospace"
+		app:layout_centerX="65%"
+		app:layout_centerY="prev.centerY"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="="
+		android:textSize="20sp"
+		android:typeface="monospace"
+		app:layout_centerX="35%"
+		app:layout_top="prev.bottom+30dp"/>
+
+	<View
+		android:layout_width="70dp"
+		android:layout_height="30dp"
+		android:background="@color/color5"
+		app:layout_centerY="prev.centerY"
+		app:layout_left="(sample8_b1.tag||sample8_b2.tag)&amp;&amp;sample8_b3.tag?next.left:next.right"/>
+
+	<TextView
+		android:layout_width="70dp"
+		android:layout_height="30dp"
+		android:gravity="center"
+		android:text="true"
+		android:textSize="20sp"
+		android:typeface="monospace"
+		app:layout_centerX="50%"
+		app:layout_centerY="prev.centerY"/>
+
+	<TextView
+		android:layout_width="70dp"
+		android:layout_height="30dp"
+		android:gravity="center"
+		android:text="false"
+		android:textSize="20sp"
+		android:typeface="monospace"
+		app:layout_centerY="prev.centerY"
+		app:layout_left="prev.right"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:text="layout_left=(sample8_b1.tag||sample8_b2.tag)&amp;&amp;sample8_b3.tag?next.left:next.right"
+		android:textSize="11sp"
+		android:typeface="monospace"
+		app:layout_centerX="50%"
+		app:layout_left="20dp"
+		app:layout_top="prev.bottom+30dp"/>
+
+</com.github.mmin18.widget.FlexLayout>

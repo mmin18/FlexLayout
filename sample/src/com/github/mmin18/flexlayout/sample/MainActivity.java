@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,5 +45,24 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
 			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	public void sample5Switch(View v) {
+		View hv = findViewById(R.id.hide_view);
+		hv.setVisibility(hv.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+	}
+
+	public void sample7Inc(View v) {
+		int i = v.getTag() instanceof Integer ? ((Integer) v.getTag()).intValue() : 0;
+		v.setTag(i + 1);
+		((TextView) v).setText("(" + (i + 1) + ") ++");
+		v.requestLayout();
+	}
+
+	public void sample8Switch(View v) {
+		boolean b = v.getTag() instanceof Boolean ? ((Boolean) v.getTag()).booleanValue() : false;
+		v.setTag(!b);
+		((TextView) v).setText("" + (!b));
+		v.requestLayout();
 	}
 }
