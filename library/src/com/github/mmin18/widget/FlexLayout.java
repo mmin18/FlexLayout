@@ -580,6 +580,9 @@ public class FlexLayout extends ViewGroup {
 			float w = lp.getWidth();
 			if (w == w) {
 				dimenW = Math.round(w);
+			} else if (onlyRefSelf(lp.width2) && onlyRefSelf(lp.left) && onlyRefSelf(lp.right) && onlyRefSelf(lp.centerX)) {
+				// in case layout_width="this.height"
+				dimenW = ViewGroup.LayoutParams.WRAP_CONTENT;
 			} else {
 				return false;
 			}
@@ -590,6 +593,9 @@ public class FlexLayout extends ViewGroup {
 			float h = lp.getHeight();
 			if (h == h) {
 				dimenH = Math.round(h);
+			} else if (onlyRefSelf(lp.height2) && onlyRefSelf(lp.top) && onlyRefSelf(lp.bottom) && onlyRefSelf(lp.centerY)) {
+				// in case layout_height="this.width"
+				dimenH = ViewGroup.LayoutParams.WRAP_CONTENT;
 			} else {
 				return false;
 			}
@@ -601,6 +607,20 @@ public class FlexLayout extends ViewGroup {
 		child.measure(getChildMeasureSpec(specW, 0, dimenW), getChildMeasureSpec(specH, 0, dimenH));
 		lp.mMeasuredWidth = child.getMeasuredWidth();
 		lp.mMeasuredHeight = child.getMeasuredHeight();
+		return true;
+	}
+
+	private boolean onlyRefSelf(RPN exp) {
+		if (exp != null) {
+			for (Object obj : exp.list) {
+				if (obj instanceof Ref) {
+					Ref ref = (Ref) obj;
+					if (ref.target != Ref.TARGET_THIS) {
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 
