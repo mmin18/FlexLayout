@@ -20,8 +20,6 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.flex_layout);
 
 		setupCatalogViews();
-
-//		findViewById(android.R.id.text1).setTag(12);
 	}
 
 	private void setupCatalogViews() {
