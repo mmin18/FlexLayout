@@ -19,4 +19,12 @@
 		android:layout_height="1px"
 		android:visibility="gone"/>
 
+	<TextView
+		android:gravity="center"
+		android:text="Hello"
+		android:textColor="#fff"
+		android:textSize="20sp"
+		app:layout_height="wrap_content"
+		app:layout_width="match_parent"/>
+
 </com.github.mmin18.widget.FlexLayout>
