@@ -9,28 +9,28 @@
 		android:background="#8f00"
 		app:layout_centerX="100dp"
 		app:layout_centerY="100dp"
-		app:layout_height2="20dp"
-		app:layout_width2="10dp"/>
+		app:layout_height="20dp"
+		app:layout_width="10dp"/>
 
 	<View
 		android:id="@+id/a"
 		android:background="#80f0"
-		app:layout_height2="prev.width"
+		app:layout_height="prev.width"
 		app:layout_left="prev.right+10dp"
 		app:layout_top="prev.bottom+10dp"
-		app:layout_width2="prev.height"/>
+		app:layout_width="prev.height"/>
 
 	<View
 		android:background="#800f"
 		app:layout_bottom="a.top"
-		app:layout_width2="a.height"/>
+		app:layout_width="a.height"/>
 
 	<View
 		android:background="#8f0f"
-		app:layout_height2="@dimen/l50dp"
+		app:layout_height="@dimen/l50dp"
 		app:layout_left="prev.right"
 		app:layout_top="prev.bottom"
-		app:layout_width2="0+@dimen/l50dp/2"/>
+		app:layout_width="0+@dimen/l50dp/2"/>
 
 	<TextView
 		android:id="@+id/next"

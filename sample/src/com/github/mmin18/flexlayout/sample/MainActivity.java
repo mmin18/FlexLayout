@@ -10,6 +10,8 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.flex_layout);
+		setContentView(R.layout.flex_layout_x);
+
+		findViewById(android.R.id.text1).setTag(12);
 	}
 }

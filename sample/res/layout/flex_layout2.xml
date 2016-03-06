@@ -7,14 +7,14 @@
 
 	<View
 		android:background="#8f00"
-		app:layout_height2="min(screen.width,screen.height)"
-		app:layout_width2="min(screen.width,screen.height)"/>
+		app:layout_height="min(screen.width,screen.height)"
+		app:layout_width="min(screen.width,screen.height)"/>
 
 	<View
 		android:layout_width="0px"
 		android:layout_height="0px"
 		android:background="#80f0"
-		app:layout_height2="screen.height/2"
-		app:layout_width2="screen.width/2"/>
+		app:layout_height="screen.height/2"
+		app:layout_width="screen.width/2"/>
 
 </com.github.mmin18.widget.FlexLayout>

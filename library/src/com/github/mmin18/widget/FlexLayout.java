@@ -16,7 +16,7 @@ import java.util.Stack;
 /**
  * Created by mmin18 on 2/14/16.
  * <p/>
- * layout_left, layout_right, layout_top, layout_bottom, layout_centerX, layout_centerY, layout_width2, layout_height2
+ * layout_left, layout_right, layout_top, layout_bottom, layout_centerX, layout_centerY, layout_width, layout_height
  * wrap_content, match_parent, 100%, 50%+100dp
  * this.width*1.6, prev.right+10dp, next.left-10dp
  * parent.height/2 (only parent.width and parent.height are supported)
@@ -69,8 +69,8 @@ public class FlexLayout extends ViewGroup {
 			this.bottom = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_bottom));
 			this.centerX = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_centerX));
 			this.centerY = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_centerY));
-			this.width2 = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_width2));
-			this.height2 = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_height2));
+			this.width2 = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_width));
+			this.height2 = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_height));
 			a.recycle();
 		}
 

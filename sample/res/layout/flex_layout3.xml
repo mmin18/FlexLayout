@@ -12,8 +12,8 @@
 
 		<View
 			android:background="#8f00"
-			app:layout_height2="50%"
-			app:layout_width2="50%"/>
+			app:layout_height="50%"
+			app:layout_width="50%"/>
 
 		<View
 			android:layout_width="200dp"

@@ -7,7 +7,7 @@
 		<attr name="layout_bottom" format="string"/>
 		<attr name="layout_centerX" format="string"/>
 		<attr name="layout_centerY" format="string"/>
-		<attr name="layout_width2" format="string"/>
-		<attr name="layout_height2" format="string"/>
+		<attr name="layout_width" format="string"/>
+		<attr name="layout_height" format="string"/>
 	</declare-styleable>
 </resources>
