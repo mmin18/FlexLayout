@@ -22,8 +22,11 @@ import java.util.Stack;
  * parent.height/2 (only parent.width and parent.height are supported)
  * other_view.width*0.5-30px (other_view is defined as res id)
  * screen.width, screen.height (screen width/height is relative to current orientation)
- * (prev.width-10dp)/2
  * max(view1.right,view2.right), min(), round(), ceil(), floor(), abs(), mod(), pow()
+ * prev.visible, prev.gone, prev.tag
+ * a==b, a!=b, a<=b, a<b, a>=b, a>b
+ * a&&b, a||b
+ * a?b:c
  */
 public class FlexLayout extends ViewGroup {
 	public FlexLayout(Context context) {
@@ -1052,6 +1055,8 @@ public class FlexLayout extends ViewGroup {
 				Object tag = view.getTag();
 				if (tag instanceof Number) {
 					return ((Number) tag).floatValue();
+				} else if (tag instanceof Boolean) {
+					return ((Boolean) tag).booleanValue() ? 1 : 0;
 				} else {
 					return 0;
 				}
