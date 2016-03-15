@@ -13,6 +13,18 @@ The idea is simple, use java expressions in layout params like `layout_left="vie
 
 Try the sample apk: [FlexLayout.apk](imgs/FlexLayout.apk)
 
+## Adding to project
+
+Add dependencies in your `build.gradle`:
+
+```groovy
+	dependencies {
+	    compile 'com.github.mmin18:flexlayout:1.1.0'
+	}
+```
+
+Or if you are using Eclipse, just copy [FlexLayout.java](library/src/com/github/mmin18/widget/FlexLayout.java) and [attrs.xml](library/res/values/attrs.xml) to your project.
+
 ## Layout Params
 
 |   Horizontal   |    Vertical    |
