@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.mmin18.widget.FlexLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="320dp">
+
+	<Button
+		android:id="@+id/sample9_add"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="sample9Add"
+		android:text="Add"
+		app:layout_top="30dp"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:text="Stack like a LinearLayout\n(But you are not able to use &lt;include&gt; to include app:layout_ attrs due to some limitations in Android resource)"
+		app:layout_left="prev.right+10dp"
+		app:layout_right="100%"
+		app:layout_top="0px"/>
+
+</com.github.mmin18.widget.FlexLayout>

@@ -65,4 +65,8 @@ public class MainActivity extends Activity {
 		((TextView) v).setText("" + (!b));
 		v.requestLayout();
 	}
+
+	public void sample9Add(View v) {
+		getLayoutInflater().inflate(R.layout.stack_item, (ViewGroup) v.getParent());
+	}
 }

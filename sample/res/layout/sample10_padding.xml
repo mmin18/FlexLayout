@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:orientation="vertical">
+
+	<com.github.mmin18.widget.FlexLayout
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:background="@color/color1"
+		android:clipChildren="false"
+		android:clipToPadding="false"
+		android:padding="10dp">
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="@color/color2"/>
+
+	</com.github.mmin18.widget.FlexLayout>
+
+	<com.github.mmin18.widget.FlexLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@color/color1"
+		android:clipChildren="false"
+		android:clipToPadding="false"
+		android:padding="10dp">
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:background="@color/color2"/>
+
+	</com.github.mmin18.widget.FlexLayout>
+
+	<com.github.mmin18.widget.FlexLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@color/color1"
+		android:clipChildren="false"
+		android:clipToPadding="false"
+		android:padding="10dp">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/color2"
+			android:text="long long text long long text long long text long long text long long text long long text long long text long long text "/>
+
+	</com.github.mmin18.widget.FlexLayout>
+
+</LinearLayout>
