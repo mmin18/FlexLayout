@@ -317,6 +317,11 @@ public class FlexLayout extends ViewGroup {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
+		final int paddingLeft = getPaddingLeft();
+		final int paddingRight = getPaddingRight();
+		final int paddingTop = getPaddingTop();
+		final int paddingBottom = getPaddingBottom();
+
 		final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
 		final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 		final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -324,19 +329,19 @@ public class FlexLayout extends ViewGroup {
 
 		int maxWidth, maxHeight;
 		if (widthMode == MeasureSpec.EXACTLY) {
-			myWidth = maxWidth = widthSize;
+			myWidth = maxWidth = (widthSize - paddingLeft - paddingRight);
 		} else if (widthMode == MeasureSpec.AT_MOST) {
 			myWidth = -1;
-			maxWidth = widthSize;
+			maxWidth = (widthSize - paddingLeft - paddingRight);
 		} else {
 			myWidth = -1;
 			maxWidth = -1;
 		}
 		if (heightMode == MeasureSpec.EXACTLY) {
-			myHeight = maxHeight = heightSize;
+			myHeight = maxHeight = (heightSize - paddingTop - paddingBottom);
 		} else if (heightMode == MeasureSpec.AT_MOST) {
 			myHeight = -1;
-			maxHeight = heightSize;
+			maxHeight = (heightSize - paddingTop - paddingBottom);
 		} else {
 			myHeight = -1;
 			maxHeight = -1;
@@ -574,7 +579,7 @@ public class FlexLayout extends ViewGroup {
 			child.measure(mwspec, mhspec);
 		}
 
-		setMeasuredDimension(myWidth, myHeight);
+		setMeasuredDimension(myWidth + paddingLeft + paddingRight, myHeight + paddingTop + paddingBottom);
 	}
 
 	private boolean measureChild(int widthMeasureSpec, int heightMeasureSpec, View child, LayoutParams lp) {
@@ -605,9 +610,19 @@ public class FlexLayout extends ViewGroup {
 		} else {
 			dimenH = lp.height;
 		}
-		int specW = myWidth == -1 ? widthMeasureSpec : MeasureSpec.makeMeasureSpec(myWidth, MeasureSpec.EXACTLY);
-		int specH = myHeight == -1 ? heightMeasureSpec : MeasureSpec.makeMeasureSpec(myHeight, MeasureSpec.EXACTLY);
-		child.measure(getChildMeasureSpec(specW, 0, dimenW), getChildMeasureSpec(specH, 0, dimenH));
+		int specW;
+		if (myWidth == -1) {
+			specW = getChildMeasureSpec(widthMeasureSpec, getPaddingLeft() + getPaddingRight(), dimenW);
+		} else {
+			specW = getChildMeasureSpec(MeasureSpec.makeMeasureSpec(myWidth, MeasureSpec.EXACTLY), 0, dimenW);
+		}
+		int specH;
+		if (myHeight == -1) {
+			specH = getChildMeasureSpec(heightMeasureSpec, getPaddingTop() + getPaddingBottom(), dimenH);
+		} else {
+			specH = getChildMeasureSpec(MeasureSpec.makeMeasureSpec(myHeight, MeasureSpec.EXACTLY), 0, dimenH);
+		}
+		child.measure(specW, specH);
 		lp.mMeasuredWidth = child.getMeasuredWidth();
 		lp.mMeasuredHeight = child.getMeasuredHeight();
 		return true;
@@ -629,6 +644,9 @@ public class FlexLayout extends ViewGroup {
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		final int paddingLeft = getPaddingLeft();
+		final int paddingTop = getPaddingTop();
+
 		//  The layout has actually already been performed and the positions
 		//  cached.  Apply the cached values to the children.
 		final int count = getChildCount();
@@ -637,7 +655,8 @@ public class FlexLayout extends ViewGroup {
 			View child = getChildAt(i);
 			if (child.getVisibility() != GONE) {
 				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) child.getLayoutParams();
-				child.layout(Math.round(lp.getLeft()), Math.round(lp.getTop()), Math.round(lp.getRight()), Math.round(lp.getBottom()));
+				child.layout(paddingLeft + Math.round(lp.getLeft()), paddingTop + Math.round(lp.getTop()),
+						paddingLeft + Math.round(lp.getRight()), paddingTop + Math.round(lp.getBottom()));
 			}
 		}
 	}
