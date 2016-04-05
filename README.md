@@ -58,7 +58,7 @@ or
 
 ## Reference other views
 
-Reference previous view using `prev`, next view using `next`
+Reference previous view using `prev`, next view using `next` (Position in the XML layout file)
 
 ![IMG](imgs/s4.png)
 
