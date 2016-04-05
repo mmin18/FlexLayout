@@ -1,6 +1,7 @@
 package com.github.mmin18.widget;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -56,29 +57,36 @@ public class FlexLayout extends ViewGroup {
 		float mWidth, mHeight;
 		int mMeasuredWidth, mMeasuredHeight;
 
+		String positionDescription; // only available in debug mode
+
 		static final int[] ViewGroup_Layout = new int[]{android.R.attr.layout_width, android.R.attr.layout_height};
 
 		public LayoutParams(Context c, AttributeSet attrs) {
 			super(0, 0);
+
+			if (isDebug(c)) {
+				positionDescription = attrs.getPositionDescription();
+			}
+
 			TypedArray a = c.obtainStyledAttributes(attrs, ViewGroup_Layout);
 			width = a.getLayoutDimension(0, UNSPECIFIED);
 			height = a.getLayoutDimension(1, UNSPECIFIED);
 			a.recycle();
 
 			a = c.obtainStyledAttributes(attrs, R.styleable.FlexLayout_Layout);
-			this.left = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_left));
-			this.top = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_top));
-			this.right = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_right));
-			this.bottom = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_bottom));
-			this.centerX = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_centerX));
-			this.centerY = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_centerY));
+			this.left = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_left), "layout_left");
+			this.top = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_top), "layout_top");
+			this.right = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_right), "layout_right");
+			this.bottom = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_bottom), "layout_bottom");
+			this.centerX = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_centerX), "layout_centerX");
+			this.centerY = RPN.parse(c, a.getString(R.styleable.FlexLayout_Layout_layout_centerY), "layout_centerY");
 			String str = a.getString(R.styleable.FlexLayout_Layout_layout_width);
 			if ("match_parent".equals(str) || "fill_parent".equals(str)) {
 				width = MATCH_PARENT;
 			} else if ("wrap_content".equals(str)) {
 				width = WRAP_CONTENT;
 			} else {
-				this.width2 = RPN.parse(c, str);
+				this.width2 = RPN.parse(c, str, "layout_width");
 			}
 			str = a.getString(R.styleable.FlexLayout_Layout_layout_height);
 			if ("match_parent".equals(str) || "fill_parent".equals(str)) {
@@ -86,9 +94,34 @@ public class FlexLayout extends ViewGroup {
 			} else if ("wrap_content".equals(str)) {
 				height = WRAP_CONTENT;
 			} else {
-				this.height2 = RPN.parse(c, str);
+				this.height2 = RPN.parse(c, str, "layout_height");
 			}
 			a.recycle();
+
+			int co = 0;
+			if (this.left != null)
+				co++;
+			if (this.right != null)
+				co++;
+			if (this.centerX != null)
+				co++;
+			if (this.width2 != null || this.width != LayoutParams.UNSPECIFIED)
+				co++;
+			if (co < 1) {
+				throw new IllegalArgumentException("no LayoutParams in layout_left|layout_right|layout_centerX|layout_width");
+			}
+			co = 0;
+			if (this.top != null)
+				co++;
+			if (this.bottom != null)
+				co++;
+			if (this.centerY != null)
+				co++;
+			if (this.height2 != null || this.height != LayoutParams.UNSPECIFIED)
+				co++;
+			if (co < 1) {
+				throw new IllegalArgumentException("no LayoutParams in layout_top|layout_bottom|layout_centerY|layout_height");
+			}
 		}
 
 		public LayoutParams(int width, int height) {
@@ -390,42 +423,42 @@ public class FlexLayout extends ViewGroup {
 				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) child.getLayoutParams();
 
 				if (lp.left != null && lp.mLeft != lp.mLeft) {
-					float v = lp.left.eval(this, i, 0);
+					float v = lp.left.eval(this, i, 0, lp.positionDescription);
 					if (v == v) {
 						lp.mLeft = v;
 						calcCount++;
 					}
 				}
 				if (lp.right != null && lp.mRight != lp.mRight) {
-					float v = lp.right.eval(this, i, 0);
+					float v = lp.right.eval(this, i, 0, lp.positionDescription);
 					if (v == v) {
 						lp.mRight = v;
 						calcCount++;
 					}
 				}
 				if (lp.top != null && lp.mTop != lp.mTop) {
-					float v = lp.top.eval(this, i, 1);
+					float v = lp.top.eval(this, i, 1, lp.positionDescription);
 					if (v == v) {
 						lp.mTop = v;
 						calcCount++;
 					}
 				}
 				if (lp.bottom != null && lp.mBottom != lp.mBottom) {
-					float v = lp.bottom.eval(this, i, 1);
+					float v = lp.bottom.eval(this, i, 1, lp.positionDescription);
 					if (v == v) {
 						lp.mBottom = v;
 						calcCount++;
 					}
 				}
 				if (lp.centerX != null && lp.mCenterX != lp.mCenterX) {
-					float v = lp.centerX.eval(this, i, 0);
+					float v = lp.centerX.eval(this, i, 0, lp.positionDescription);
 					if (v == v) {
 						lp.mCenterX = v;
 						calcCount++;
 					}
 				}
 				if (lp.centerY != null && lp.mCenterY != lp.mCenterY) {
-					float v = lp.centerY.eval(this, i, 1);
+					float v = lp.centerY.eval(this, i, 1, lp.positionDescription);
 					if (v == v) {
 						lp.mCenterY = v;
 						calcCount++;
@@ -433,7 +466,7 @@ public class FlexLayout extends ViewGroup {
 				}
 				if (lp.mWidth != lp.mWidth) {
 					if (lp.width2 != null) {
-						float v = lp.width2.eval(this, i, 0);
+						float v = lp.width2.eval(this, i, 0, lp.positionDescription);
 						if (v == v) {
 							lp.mWidth = v;
 							calcCount++;
@@ -458,7 +491,7 @@ public class FlexLayout extends ViewGroup {
 				}
 				if (lp.mHeight != lp.mHeight) {
 					if (lp.height2 != null) {
-						float v = lp.height2.eval(this, i, 1);
+						float v = lp.height2.eval(this, i, 1, lp.positionDescription);
 						if (v == v) {
 							lp.mHeight = v;
 							calcCount++;
@@ -533,7 +566,7 @@ public class FlexLayout extends ViewGroup {
 						myHeight = maxHeight == -1 ? maxh : Math.min(maxh, maxHeight);
 					}
 				} else {
-					throw new RuntimeException("incomplete layout (" + invIndex + ")");
+					throw new IllegalStateException("incomplete layout, circular dependency? (index=" + invIndex + ")");
 				}
 			}
 		}
@@ -550,7 +583,7 @@ public class FlexLayout extends ViewGroup {
 					sb.append(i);
 				}
 			}
-			throw new RuntimeException("incomplete layout (" + sb + ")");
+			throw new IllegalStateException("incomplete layout, circular dependency? (index=" + sb + ")");
 		}
 
 		for (int i = 0; i < count; i++) {
@@ -997,10 +1030,70 @@ public class FlexLayout extends ViewGroup {
 
 		@Override
 		public String toString() {
-			return target + "->" + property;
+			StringBuilder sb = new StringBuilder();
+			switch (target) {
+				case TARGET_THIS:
+					sb.append("this");
+					break;
+				case TARGET_PREV:
+					sb.append("prev");
+					break;
+				case TARGET_NEXT:
+					sb.append("next");
+					break;
+				case TARGET_PARENT:
+					sb.append("parent");
+					break;
+				case TARGET_SCREEN:
+					sb.append("screen");
+					break;
+				default:
+					sb.append("?");
+					break;
+			}
+			sb.append('.');
+			switch (property) {
+				case PROP_LEFT:
+					sb.append("left");
+					break;
+				case PROP_TOP:
+					sb.append("top");
+					break;
+				case PROP_RIGHT:
+					sb.append("right");
+					break;
+				case PROP_BOTTOM:
+					sb.append("bottom");
+					break;
+				case PROP_CENTER_X:
+					sb.append("centerX");
+					break;
+				case PROP_CENTER_Y:
+					sb.append("centerY");
+					break;
+				case PROP_WIDTH:
+					sb.append("width");
+					break;
+				case PROP_HEIGHT:
+					sb.append("height");
+					break;
+				case PROP_VISIBLE:
+					sb.append("visible");
+					break;
+				case PROP_GONE:
+					sb.append("gone");
+					break;
+				case PROP_TAG:
+					sb.append("tag");
+					break;
+				default:
+					sb.append("?");
+					break;
+			}
+			return sb.toString();
 		}
 
-		public float eval(FlexLayout fl, int index, int xy) {
+		public float eval(FlexLayout fl, int index, int xy, String positionDescription) {
 			View view = null;
 			if (target == TARGET_THIS) {
 				view = fl.getChildAt(index);
@@ -1022,7 +1115,7 @@ public class FlexLayout extends ViewGroup {
 						return fl.myHeight;
 					}
 				} else {
-					throw new RuntimeException("only support parent.width and parent.height");
+					throw new IllegalArgumentException("only support parent.width and parent.height" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
 				}
 			} else if (target == TARGET_SCREEN) {
 				DisplayMetrics dm = fl.getResources().getDisplayMetrics();
@@ -1031,7 +1124,7 @@ public class FlexLayout extends ViewGroup {
 				} else if (property == PROP_HEIGHT) {
 					return dm.heightPixels;
 				} else {
-					throw new RuntimeException("only support screen.width and screen.height");
+					throw new IllegalArgumentException("only support screen.width and screen.height" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
 				}
 			} else {
 				for (int i = 0, n = fl.getChildCount(); i < n; i++) {
@@ -1042,8 +1135,7 @@ public class FlexLayout extends ViewGroup {
 					}
 				}
 				if (view == null) {
-					// TODO:
-					throw new RuntimeException("view not found");
+					throw new IllegalArgumentException("view not found" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
 				}
 			}
 			if (view == null) {
@@ -1088,14 +1180,18 @@ public class FlexLayout extends ViewGroup {
 
 	static class TokenReader {
 
+		private String orig;
 		private char[] chars;
 		private int n;
 		private int i;
+		private String from;
 
-		public TokenReader(String str) {
+		public TokenReader(String str, String from) {
+			orig = str;
 			chars = str.toCharArray();
 			n = str.length();
 			i = 0;
+			this.from = from;
 		}
 
 		/**
@@ -1150,7 +1246,7 @@ public class FlexLayout extends ViewGroup {
 								return op;
 							}
 						}
-						throw new RuntimeException("syntax error");
+						throw new IllegalArgumentException("syntax error: " + from + "=" + orig);
 					}
 				} else if (num != null) {
 					if (c >= '0' && c <= '9' || c == '.') {
@@ -1203,7 +1299,7 @@ public class FlexLayout extends ViewGroup {
 						return op;
 					}
 				}
-				throw new RuntimeException("unknown token " + s);
+				throw new IllegalArgumentException("unknown token " + s + ", " + from + "=" + orig);
 			} else {
 				String s1 = str.substring(0, strDig);
 				String s2 = str.substring(strDig + 1);
@@ -1226,7 +1322,7 @@ public class FlexLayout extends ViewGroup {
 						id = ctx.getResources().getIdentifier(s1, "id", ctx.getPackageName());
 					}
 					if (id == 0) {
-						throw new RuntimeException("unknown identifier " + s1);
+						throw new IllegalArgumentException("unknown identifier " + s1 + ", " + from + "=" + orig);
 					} else {
 						refT = id;
 					}
@@ -1255,7 +1351,7 @@ public class FlexLayout extends ViewGroup {
 				} else if ("tag".equals(s2)) {
 					refP = Ref.PROP_TAG;
 				} else {
-					throw new RuntimeException("unknown token " + s2);
+					throw new IllegalArgumentException("unknown token " + s2 + ", " + from + "=" + orig);
 				}
 				return new Ref(refT, refP);
 			}
@@ -1263,7 +1359,7 @@ public class FlexLayout extends ViewGroup {
 
 		private float parseDimen(Context ctx, StringBuilder dimen, int dimenSlash) {
 			if (dimenSlash == -1) {
-				throw new RuntimeException("unknown token " + dimen);
+				throw new IllegalArgumentException("unknown token " + dimen + ", " + from + "=" + orig);
 			} else {
 				String s1 = dimen.substring(1, dimenSlash);
 				String s2 = dimen.substring(dimenSlash + 1);
@@ -1273,11 +1369,11 @@ public class FlexLayout extends ViewGroup {
 				} else if ("android:dimen".equals(s1)) {
 					pn = "android";
 				} else {
-					throw new RuntimeException("unknown identifier " + dimen);
+					throw new IllegalArgumentException("unknown identifier " + dimen + ", " + from + "=" + orig);
 				}
 				int id = ctx.getResources().getIdentifier(s2, "dimen", pn);
 				if (id == 0) {
-					throw new RuntimeException("unknown identifier " + dimen);
+					throw new IllegalArgumentException("unknown identifier " + dimen + ", " + from + "=" + orig);
 				}
 				return ctx.getResources().getDimension(id);
 			}
@@ -1292,20 +1388,22 @@ public class FlexLayout extends ViewGroup {
 	static class RPN {
 
 		private ArrayList<Object> list;
+		private String orig; // only available in debug mode
 
-		public RPN(ArrayList<Object> list) {
+		public RPN(ArrayList<Object> list, String orig) {
 			this.list = list;
+			this.orig = orig;
 		}
 
 		/**
 		 * Shunting-yard algorithm
 		 */
-		public static RPN parse(Context ctx, String str) {
+		public static RPN parse(Context ctx, String str, String from) {
 			if (str == null || str.length() == 0) {
 				return null;
 			}
 
-			TokenReader tr = new TokenReader(str);
+			TokenReader tr = new TokenReader(str, from);
 			ArrayList<Object> queue = new ArrayList<>();
 			Stack<Operator> stack = new Stack<>();
 
@@ -1324,7 +1422,7 @@ public class FlexLayout extends ViewGroup {
 							queue.add(stack.pop());
 						}
 						if (stack.empty()) {
-							throw new RuntimeException("comma misplaced or parentheses mismatched");
+							throw new IllegalArgumentException("comma misplaced or parentheses mismatched: " + from + "=" + str);
 						}
 					} else if (op == BL) {
 						stack.push(op);
@@ -1333,7 +1431,7 @@ public class FlexLayout extends ViewGroup {
 							queue.add(stack.pop());
 						}
 						if (stack.empty()) {
-							throw new RuntimeException("parentheses mismatched");
+							throw new IllegalArgumentException("parentheses mismatched: " + from + "=" + str);
 						}
 						stack.pop();
 						if (!stack.empty() && (stack.peek().flag & Operator.FLAG_FUNCTION) != 0) {
@@ -1352,16 +1450,16 @@ public class FlexLayout extends ViewGroup {
 						stack.push(op);
 					}
 				} else {
-					throw new RuntimeException("unknown token " + t);
+					throw new IllegalArgumentException("unknown token " + t + ", " + from + "=" + str);
 				}
 			}
 
 			while (!stack.empty()) {
 				Operator op = stack.pop();
 				if (op == BL) {
-					throw new RuntimeException("parentheses mismatched");
+					throw new IllegalArgumentException("parentheses mismatched: " + from + "=" + str);
 				} else if (op.assoc == 0) {
-					throw new RuntimeException("syntax error");
+					throw new IllegalArgumentException("syntax error: " + from + "=" + str);
 				} else {
 					queue.add(op);
 				}
@@ -1370,11 +1468,11 @@ public class FlexLayout extends ViewGroup {
 			if (queue.isEmpty()) {
 				return null;
 			} else {
-				return new RPN(queue);
+				return new RPN(queue, isDebug(null) ? from + "=" + str : null);
 			}
 		}
 
-		public float eval(FlexLayout fl, int index, int xy) {
+		public float eval(FlexLayout fl, int index, int xy, String positionDescription) {
 			float[] stack = new float[list.size()];
 			int sn = 0;
 
@@ -1382,7 +1480,8 @@ public class FlexLayout extends ViewGroup {
 				if (obj instanceof Operator) {
 					Operator op = (Operator) obj;
 					if (sn < op.argc) {
-						throw new RuntimeException("arg error " + op);
+						throw new IllegalArgumentException("arg error " + op
+								+ (positionDescription == null || orig == null ? "" : " (" + positionDescription + ":" + orig + ")"));
 					}
 					float a = Float.NaN, b = Float.NaN;
 					if (op.argc == 0) {
@@ -1401,22 +1500,26 @@ public class FlexLayout extends ViewGroup {
 							stack[sn++] = c;
 							continue;
 						}
-						throw new RuntimeException("argc>2 not supported");
+						throw new IllegalArgumentException("argc>2 not supported"
+								+ (positionDescription == null || orig == null ? "" : " (" + positionDescription + ":" + orig + ")"));
 					}
 					float c = op.eval(fl, index, xy, a, b);
 					stack[sn++] = c;
 				} else if (obj instanceof Float) {
 					stack[sn++] = ((Float) obj).floatValue();
 				} else if (obj instanceof Ref) {
-					float f = ((Ref) obj).eval(fl, index, xy);
+					float f = ((Ref) obj).eval(fl, index, xy,
+							positionDescription == null || orig == null ? null : positionDescription + ":" + orig);
 					stack[sn++] = f;
 				} else {
-					throw new RuntimeException("unknown token " + obj);
+					throw new IllegalArgumentException("unknown token " + obj
+							+ (positionDescription == null || orig == null ? "" : " (" + positionDescription + ":" + orig + ")"));
 				}
 			}
 
 			if (sn != 1) {
-				throw new RuntimeException("syntax error");
+				throw new IllegalArgumentException("syntax error"
+						+ (positionDescription == null || orig == null ? "" : " (" + positionDescription + ":" + orig + ")"));
 			}
 			return stack[0];
 		}
@@ -1427,4 +1530,13 @@ public class FlexLayout extends ViewGroup {
 		}
 	}
 
+	// android:debuggable="true" in AndroidManifest.xml (auto set by build tool)
+	static Boolean DEBUG = null;
+
+	static boolean isDebug(Context ctx) {
+		if (DEBUG == null && ctx != null) {
+			DEBUG = (ctx.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+		}
+		return DEBUG == Boolean.TRUE;
+	}
 }
