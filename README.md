@@ -19,7 +19,7 @@ Add dependencies in your `build.gradle`:
 
 ```groovy
 	dependencies {
-	    compile 'com.github.mmin18:flexlayout:1.1.0'
+	    compile 'com.github.mmin18:flexlayout:1.2.0'
 	}
 ```
 
@@ -143,5 +143,15 @@ Functions
 | mod(a)      |
 | pow(a)      |
 
+--------------------------------------------------
 
+# Changelog
+
+### 1.2.0 (2016-4-6)
+
+Show source code position in XML when throw Exceptions. (Syntax exception, Circular dependency, etc.)
+
+### 1.1.0 (2016-3-20)
+
+Initial release to jcenter. Including percentage, view reference, ?= expressions, logic operators.
 
