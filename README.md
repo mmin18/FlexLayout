@@ -62,11 +62,15 @@ Reference previous view using `prev`, next view using `next` (Position in the XM
 
 ![IMG](imgs/s4.png)
 
+	<View ../>        // prev = Previous view in xml layout file
+	
 	<View
 		app:layout_left="prev.right"
 		app:layout_right="next.left"
 		app:layout_top="prev.top"
 		app:layout_bottom="next.bottom" />
+	
+	<View ../>        // next = Next view in xml layout file
 
 Reference a specific view using `view's id`
 
@@ -77,8 +81,13 @@ Reference a specific view using `view's id`
 		app:layout_right="android:text1.left"
 		app:layout_top="view1.top"
 		app:layout_bottom="android:text1.bottom" />
+	
+	<View android:id="@+id/view1"
+		../>
+	<View android:id="@android:id/text1"
+		../>
 
-You can also use `parent` to reference the FlexLayout and `this` to reference the child view itself. Use `screen` to reference screen size. (**screen**, **parent**, **this** only support *width* and *height* property.)
+You can also use `parent` to reference the FlexLayout and `this` to reference the child view itself. Use `screen` to reference screen size.
 
 | Properties |            |
 | ---------- | ---------- |
@@ -88,6 +97,8 @@ You can also use `parent` to reference the FlexLayout and `this` to reference th
 | width      | height     |
 | visible    | gone       |
 | *tag       |            |
+
+(**screen**, **parent**, **this** only support *width* and *height* property.)
 
 `view.visible`: view.getVisibility() == View.VISIBLE
 
