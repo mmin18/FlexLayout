@@ -147,7 +147,29 @@ Functions
 | mod(a)      |
 | pow(a)      |
 
---------------------------------------------------
+# Benchmark
+
+The following benchmark is done by Piasy, and you can check the details [here](http://blog.piasy.com/2016/04/07/Layout-Perf/).
+
+### Simple Layout
+
+|                | inflate (ns) | measure (ns) | layout (ns) |
+| -------------- | ------------ | ------------ | ----------- |
+| RelativeLayout | 3325842      | 947464       | 108585      |
+| FrameLayout    | 3159841      | 879161       | 112988      |
+| FlexLayout     | 5278923      | 796837       | 111414      |
+
+### Complex Layout
+
+|                | inflate (ns) | measure (ns) | layout (ns) |
+| -------------- | ------------ | ------------ | ----------- |
+| RelativeLayout | 17479435     | 2268045      | 822163      |
+| GridLayout     | 20350271     | 3270156      | 1177185     |
+| FlexLayout     | 21698676     | 2703914      | 1001549     |
+
+You can check the layout xml files [here](https://github.com/Piasy/AndroidPlayground/tree/4a3e49613764d4eec4b48b0eee29b1ea70a027c2/LayoutPerfDemo/src/main/res/layout)
+
+FlexLayout usually takes longer to inflate, but it's equally fast in measure and layout. Normally you use less hierarchy and views than RelativeLayout or LinearLayout, so the overall time spend is competitively, especially when comes to complex layouts.
 
 # Changelog
 
