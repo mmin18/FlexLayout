@@ -1114,8 +1114,10 @@ public class FlexLayout extends ViewGroup {
 					} else {
 						return fl.myHeight;
 					}
+				} else if (property == PROP_LEFT || property == PROP_TOP || property == PROP_RIGHT || property == PROP_BOTTOM || property == PROP_CENTER_X || property == PROP_CENTER_Y) {
+					throw new IllegalArgumentException(this.toString() + " is not supported" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
 				} else {
-					throw new IllegalArgumentException("only support parent.width and parent.height" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
+					view = fl;
 				}
 			} else if (target == TARGET_SCREEN) {
 				DisplayMetrics dm = fl.getResources().getDisplayMetrics();
@@ -1124,7 +1126,7 @@ public class FlexLayout extends ViewGroup {
 				} else if (property == PROP_HEIGHT) {
 					return dm.heightPixels;
 				} else {
-					throw new IllegalArgumentException("only support screen.width and screen.height" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
+					throw new IllegalArgumentException(this.toString() + " is not supported" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
 				}
 			} else {
 				for (int i = 0, n = fl.getChildCount(); i < n; i++) {
@@ -1141,22 +1143,29 @@ public class FlexLayout extends ViewGroup {
 			if (view == null) {
 				return 0;
 			}
-			FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 			if (property == PROP_LEFT) {
+				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 				return lp.getLeft();
 			} else if (property == PROP_TOP) {
+				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 				return lp.getTop();
 			} else if (property == PROP_RIGHT) {
+				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 				return lp.getRight();
 			} else if (property == PROP_BOTTOM) {
+				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 				return lp.getBottom();
 			} else if (property == PROP_CENTER_X) {
+				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 				return lp.getCenterX();
 			} else if (property == PROP_CENTER_Y) {
+				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 				return lp.getCenterY();
 			} else if (property == PROP_WIDTH) {
+				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 				return lp.getWidth();
 			} else if (property == PROP_HEIGHT) {
+				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) view.getLayoutParams();
 				return lp.getHeight();
 			} else if (property == PROP_VISIBLE) {
 				return view.getVisibility() == View.VISIBLE ? 1 : 0;
