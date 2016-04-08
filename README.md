@@ -89,22 +89,26 @@ Reference a specific view using `view's id`
 
 You can also use `parent` to reference the FlexLayout and `this` to reference the child view itself. Use `screen` to reference screen size.
 
-| Properties |            |
+| Keyword    | Target     |
 | ---------- | ---------- |
-| left       | top        |
-| right      | bottom     |
-| centerX    | centerY    |
-| width      | height     |
-| visible    | gone       |
-| *tag       |            |
+| prev       | Previous view in XML layout |
+| next       | Next view in XML layout |
+| *view_id*  | *&lt;View id="@+id/view_id" /&gt;* defined in the same layout |
+| this       | The view itself |
+| parent     | The parent FlexLayout, doesn't support *left* *top* *right* *bottom* *centerX* *centerY* |
+| screen     | Screen size (getResources().getDisplayMetrics(), only support *width* and *height*)|
 
-(**screen**, **parent**, **this** only support *width* and *height* property.)
+| Properties |            | Value |
+| ---------- | ---------- | ----- |
+| left       | top        | |
+| right      | bottom     | |
+| centerX    | centerY    | |
+| width      | height     | |
+| visible    |            | view.getVisibility() == View.VISIBLE |
+| gone       |            | view.getVisibility() == View.GONE |
+| tag        |            | view.getTag(), only support Number or Boolean. Other types or null returns 0 |
 
-`view.visible`: view.getVisibility() == View.VISIBLE
-
-`view.gone`: view.getVisibility() == View.GONE
-
-`view.tag`: view.getTag(). Use View.setTag() to set a Number or Boolean and call View.requestLayout() to trigger layout. Types other than Number and Boolean returns 0.
+(When use with `view.tag`, after View.setTag() you should call View.requestLayout() to trigger layout.)
 
 ## Expression
 
