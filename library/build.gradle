@@ -61,7 +61,7 @@ publish {
     userOrg = 'mmin18'
     groupId = 'com.github.mmin18'
     artifactId = 'flexlayout'
-    publishVersion = '1.2.0'
+    publishVersion = '1.2.1'
     desc = 'More powerful than LinearLayout and RelativeLayout which use java expression in layout params'
     website = 'https://github.com/mmin18/FlexLayout'
 }

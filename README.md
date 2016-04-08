@@ -19,7 +19,7 @@ Add dependencies in your `build.gradle`:
 
 ```groovy
 	dependencies {
-	    compile 'com.github.mmin18:flexlayout:1.2.0'
+	    compile 'com.github.mmin18:flexlayout:1.2.1'
 	}
 ```
 
@@ -150,6 +150,10 @@ Functions
 --------------------------------------------------
 
 # Changelog
+
+### 1.2.1 (2016-4-8)
+
+Support parent.visible, parent.gone, parent.tag
 
 ### 1.2.0 (2016-4-6)
 
