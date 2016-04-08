@@ -147,6 +147,16 @@ Functions
 | mod(a)      |
 | pow(a)      |
 
+## dimens.xml
+
+Of course you can reference dimensions defined in `res/values/dimens.xml`
+
+	<View
+		app:left="@dimen/default_margin"
+		app:bottom="50%-@dimen/default_margin"
+		app:width="2*@android:dimen/app_icon_size"
+		../>
+
 # Benchmark
 
 The following benchmark is done by Piasy, and you can check the details [here](http://blog.piasy.com/2016/04/07/Layout-Perf/).
