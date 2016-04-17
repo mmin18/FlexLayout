@@ -19,7 +19,7 @@ Add dependencies in your `build.gradle`:
 
 ```groovy
 	dependencies {
-	    compile 'com.github.mmin18:flexlayout:1.2.1'
+	    compile 'com.github.mmin18:flexlayout:1.2.2'
 	}
 ```
 
