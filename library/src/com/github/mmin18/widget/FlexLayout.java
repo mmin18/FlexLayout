@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import com.github.mmin18.flexlayout.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -40,6 +42,12 @@ public class FlexLayout extends ViewGroup {
 
 	public FlexLayout(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+		if (isInEditMode()) {
+			DEBUG = Boolean.TRUE;
+			if (EDIT_MODE_ID_MAP == null) {
+				EDIT_MODE_ID_MAP = new HashMap<String, Integer>();
+			}
+		}
 	}
 
 	int myWidth;
@@ -57,6 +65,7 @@ public class FlexLayout extends ViewGroup {
 		float mWidth, mHeight;
 		int mMeasuredWidth, mMeasuredHeight;
 
+		int editModeId; // only available in edit mode
 		String positionDescription; // only available in debug mode
 
 		static final int[] ViewGroup_Layout = new int[]{android.R.attr.layout_width, android.R.attr.layout_height};
@@ -64,6 +73,21 @@ public class FlexLayout extends ViewGroup {
 		public LayoutParams(Context c, AttributeSet attrs) {
 			super(0, 0);
 
+			if (EDIT_MODE_ID_MAP != null) {
+				String idStr = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "id");
+				if (idStr != null) {
+					if (idStr.startsWith("@+id/")) {
+						idStr = idStr.substring("@+id/".length());
+					} else if (idStr.startsWith("@id/")) {
+						idStr = idStr.substring("@id/".length());
+					} else if (idStr.startsWith("@android:id/")) {
+						idStr = "android:" + idStr.substring("@android:id/".length());
+					} else {
+						throw new IllegalArgumentException("unidentified id " + idStr);
+					}
+					editModeId = getEditModeId(idStr);
+				}
+			}
 			if (isDebug(c)) {
 				positionDescription = attrs.getPositionDescription();
 			}
@@ -1129,15 +1153,30 @@ public class FlexLayout extends ViewGroup {
 					throw new IllegalArgumentException(this.toString() + " is not supported" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
 				}
 			} else {
-				for (int i = 0, n = fl.getChildCount(); i < n; i++) {
-					View v = fl.getChildAt(i);
-					if (v.getId() == target) {
-						view = v;
-						break;
+				if (isEditModeId(target)) {
+					for (int i = 0, n = fl.getChildCount(); i < n; i++) {
+						View v = fl.getChildAt(i);
+						if (v.getLayoutParams() instanceof LayoutParams && ((LayoutParams) v.getLayoutParams()).editModeId == target) {
+							view = v;
+							break;
+						}
 					}
-				}
-				if (view == null) {
-					throw new IllegalArgumentException("view not found" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
+					if (view == null) {
+						String idName = getEditModeIdName(target);
+						throw new IllegalArgumentException(idName + " not found" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
+					}
+				} else {
+					for (int i = 0, n = fl.getChildCount(); i < n; i++) {
+						View v = fl.getChildAt(i);
+						if (v.getId() == target) {
+							view = v;
+							break;
+						}
+					}
+					if (view == null) {
+						String idName = fl.getResources().getResourceEntryName(target);
+						throw new IllegalArgumentException((idName == null ? "view" : idName) + " not found" + (positionDescription == null ? "" : " (" + positionDescription + ")"));
+					}
 				}
 			}
 			if (view == null) {
@@ -1331,7 +1370,12 @@ public class FlexLayout extends ViewGroup {
 						id = ctx.getResources().getIdentifier(s1, "id", ctx.getPackageName());
 					}
 					if (id == 0) {
-						throw new IllegalArgumentException("unknown identifier " + s1 + ", " + from + "=" + orig);
+						if (EDIT_MODE_ID_MAP != null) {
+							// getResources().getIdentifier() is not supported in EditMode, so we use editModeId instead
+							refT = getEditModeId(s1);
+						} else {
+							throw new IllegalArgumentException("unknown identifier " + s1 + ", " + from + "=" + orig);
+						}
 					} else {
 						refT = id;
 					}
@@ -1382,7 +1426,11 @@ public class FlexLayout extends ViewGroup {
 				}
 				int id = ctx.getResources().getIdentifier(s2, "dimen", pn);
 				if (id == 0) {
-					throw new IllegalArgumentException("unknown identifier " + dimen + ", " + from + "=" + orig);
+					if (EDIT_MODE_ID_MAP != null) {
+						throw new IllegalStateException(dimen + " is not supported in AndroidStudio Preview, " + from + "=" + orig);
+					} else {
+						throw new IllegalArgumentException("unknown identifier " + dimen + ", " + from + "=" + orig);
+					}
 				}
 				return ctx.getResources().getDimension(id);
 			}
@@ -1547,5 +1595,34 @@ public class FlexLayout extends ViewGroup {
 			DEBUG = (ctx.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
 		}
 		return DEBUG == Boolean.TRUE;
+	}
+
+	// use our own id in EditMode (AndroidStudio Preview), 0x0001XXXX
+	static HashMap<String, Integer> EDIT_MODE_ID_MAP = null;
+	static int EDIT_MODE_CUR_ID = 0x0f020000;
+
+	static boolean isEditModeId(int id) {
+		return (id & 0xffff0000) == 0x0f020000;
+	}
+
+	// key: view1 | android:text1
+	static int getEditModeId(String key) {
+		Integer e = EDIT_MODE_ID_MAP.get(key);
+		if (e == null) {
+			int id = EDIT_MODE_CUR_ID++;
+			EDIT_MODE_ID_MAP.put(key, id);
+			return id;
+		} else {
+			return e.intValue();
+		}
+	}
+
+	static String getEditModeIdName(int id) {
+		for (Map.Entry<String, Integer> e : EDIT_MODE_ID_MAP.entrySet()) {
+			if (e.getValue().intValue() == id) {
+				return e.getKey();
+			}
+		}
+		return null;
 	}
 }
