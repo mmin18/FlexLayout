@@ -18,18 +18,18 @@ import java.util.Stack;
 
 /**
  * Created by mmin18 on 2/14/16.
- * <p/>
- * layout_left, layout_right, layout_top, layout_bottom, layout_centerX, layout_centerY, layout_width, layout_height
- * wrap_content, match_parent, 100%, 50%+100dp
- * this.width*1.6, prev.right+10dp, next.left-10dp
- * parent.height/2 (only parent.width and parent.height are supported)
- * other_view.width*0.5-30px (other_view is defined as res id)
- * screen.width, screen.height (screen width/height is relative to current orientation)
- * max(view1.right,view2.right), min(), round(), ceil(), floor(), abs(), mod(), pow()
- * prev.visible, prev.gone, prev.tag
- * a==b, a!=b, a<=b, a<b, a>=b, a>b
- * a&&b, a||b
- * a?b:c
+ * <p>
+ * layout_left, layout_right, layout_top, layout_bottom, layout_centerX, layout_centerY, layout_width, layout_height<br>
+ * wrap_content, match_parent, 100%, 50%+100dp<br>
+ * this.width*1.6, prev.right+10dp, next.left-10dp<br>
+ * parent.height/2 (only parent.width and parent.height are supported)<br>
+ * other_view.width*0.5-30px (other_view is defined as res id)<br>
+ * screen.width, screen.height (screen width/height is relative to current orientation)<br>
+ * max(view1.right,view2.right), min(), round(), ceil(), floor(), abs(), mod(), pow()<br>
+ * prev.visible, prev.gone, prev.tag<br>
+ * a==b, a!=b, a&lt;=b, a&lt;b, a&gt;=b, a&gt;b<br>
+ * a&amp;&amp;b, a||b<br>
+ * a?b:c<br>
  */
 public class FlexLayout extends ViewGroup {
 	public FlexLayout(Context context) {

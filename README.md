@@ -183,6 +183,10 @@ FlexLayout usually takes longer to inflate, but it's equally fast in measure and
 
 # Changelog
 
+### 1.2.2 (2016-4-17)
+
+Support AndroidStudio Preview (Fix view reference in IDE preview)
+
 ### 1.2.1 (2016-4-8)
 
 Support parent.visible, parent.gone, parent.tag
