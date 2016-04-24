@@ -19,7 +19,7 @@ Add dependencies in your `build.gradle`:
 
 ```groovy
 	dependencies {
-	    compile 'com.github.mmin18:flexlayout:1.2.2'
+	    compile 'com.github.mmin18:flexlayout:1.2.3'
 	}
 ```
 
@@ -157,6 +157,27 @@ Of course you can reference dimensions defined in `res/values/dimens.xml`
 		app:width="2*@android:dimen/app_icon_size"
 		../>
 
+## wrap_content
+
+You can use wrap_content and match_parent as a normal value in expression, like `app:layout_width="min(wrap_content, 80dp)"` which is equievalent to `android:maxWidth="80dp"`.
+
+Using wrap_content in expression is more flexable than using android:maxWidth / android:minWidth. For example, you want to put an icon to the right of a TextView:
+
+![IMG](imgs/s6.png)
+
+	<TextView
+		app:layout_width="min(wrap_content, 100%-next.width)"
+		android:layout_height="wrap_content"
+		android:text="Either short or long text"
+		android:singleLine="true"
+		... />
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_left="prev.right"
+		android:src="@drawable/info"
+		... />
+
 # Benchmark
 
 The following benchmark is done by Piasy, and you can check the details [here](http://blog.piasy.com/2016/04/07/Layout-Perf/).
@@ -182,6 +203,10 @@ You can check the layout xml files [here](https://github.com/Piasy/AndroidPlaygr
 FlexLayout usually takes longer to inflate, but it's equally fast in measure and layout. Normally you use less hierarchy and views than RelativeLayout or LinearLayout, so the overall time spend is competitively, especially when comes to complex layouts.
 
 # Changelog
+
+### 1.2.3 (2016-4-25)
+
+Use wrap_content and match_parent as a normal value in expression.
 
 ### 1.2.2 (2016-4-17)
 
