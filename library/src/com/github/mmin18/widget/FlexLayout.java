@@ -17,8 +17,10 @@ import java.util.Map;
 import java.util.Stack;
 
 /**
- * Created by mmin18 on 2/14/16.
- * <p>
+ * A powerful Android layout view that use java expression in layout params to describe relative positions.
+ * <br>
+ * https://github.com/mmin18/FlexLayout
+ * <br><br>
  * layout_left, layout_right, layout_top, layout_bottom, layout_centerX, layout_centerY, layout_width, layout_height<br>
  * wrap_content, match_parent, 100%, 50%+100dp<br>
  * this.width*1.6, prev.right+10dp, next.left-10dp<br>
@@ -50,6 +52,8 @@ public class FlexLayout extends ViewGroup {
 		}
 	}
 
+	int myWidthMeasureSpec;
+	int myHeightMeasureSpec;
 	int myWidth;
 	int myHeight;
 
@@ -384,6 +388,9 @@ public class FlexLayout extends ViewGroup {
 		final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 		final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
+		myWidthMeasureSpec = widthMeasureSpec;
+		myHeightMeasureSpec = heightMeasureSpec;
+
 		int maxWidth, maxHeight;
 		if (widthMode == MeasureSpec.EXACTLY) {
 			myWidth = maxWidth = (widthSize - paddingLeft - paddingRight);
@@ -503,7 +510,7 @@ public class FlexLayout extends ViewGroup {
 							lp.mWidth = lp.width;
 							calcCount++;
 						} else {
-							if (lp.mMeasuredWidth == -1 && measureChild(widthMeasureSpec, heightMeasureSpec, child, lp)) {
+							if (lp.mMeasuredWidth == -1 && measureChild(this, child, lp, lp.width, lp.height)) {
 								calcCount++;
 							}
 							if (lp.mMeasuredWidth != -1 && lp.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
@@ -528,7 +535,7 @@ public class FlexLayout extends ViewGroup {
 							lp.mHeight = lp.height;
 							calcCount++;
 						} else {
-							if (lp.mMeasuredHeight == -1 && measureChild(widthMeasureSpec, heightMeasureSpec, child, lp)) {
+							if (lp.mMeasuredHeight == -1 && measureChild(this, child, lp, lp.width, lp.height)) {
 								calcCount++;
 							}
 							if (lp.mMeasuredHeight != -1 && lp.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
@@ -639,9 +646,9 @@ public class FlexLayout extends ViewGroup {
 		setMeasuredDimension(myWidth + paddingLeft + paddingRight, myHeight + paddingTop + paddingBottom);
 	}
 
-	private boolean measureChild(int widthMeasureSpec, int heightMeasureSpec, View child, LayoutParams lp) {
+	static boolean measureChild(FlexLayout fl, View child, LayoutParams lp, int lpWidth, int lpHeight) {
 		int dimenW, dimenH;
-		if (lp.width == LayoutParams.UNSPECIFIED) {
+		if (lpWidth == LayoutParams.UNSPECIFIED) {
 			float w = lp.getWidth();
 			if (w == w) {
 				dimenW = Math.round(w);
@@ -652,9 +659,9 @@ public class FlexLayout extends ViewGroup {
 				return false;
 			}
 		} else {
-			dimenW = lp.width;
+			dimenW = lpWidth;
 		}
-		if (lp.height == LayoutParams.UNSPECIFIED) {
+		if (lpHeight == LayoutParams.UNSPECIFIED) {
 			float h = lp.getHeight();
 			if (h == h) {
 				dimenH = Math.round(h);
@@ -665,19 +672,19 @@ public class FlexLayout extends ViewGroup {
 				return false;
 			}
 		} else {
-			dimenH = lp.height;
+			dimenH = lpHeight;
 		}
 		int specW;
-		if (myWidth == -1) {
-			specW = getChildMeasureSpec(widthMeasureSpec, getPaddingLeft() + getPaddingRight(), dimenW);
+		if (fl.myWidth == -1) {
+			specW = getChildMeasureSpec(fl.myWidthMeasureSpec, fl.getPaddingLeft() + fl.getPaddingRight(), dimenW);
 		} else {
-			specW = getChildMeasureSpec(MeasureSpec.makeMeasureSpec(myWidth, MeasureSpec.EXACTLY), 0, dimenW);
+			specW = getChildMeasureSpec(MeasureSpec.makeMeasureSpec(fl.myWidth, MeasureSpec.EXACTLY), 0, dimenW);
 		}
 		int specH;
-		if (myHeight == -1) {
-			specH = getChildMeasureSpec(heightMeasureSpec, getPaddingTop() + getPaddingBottom(), dimenH);
+		if (fl.myHeight == -1) {
+			specH = getChildMeasureSpec(fl.myHeightMeasureSpec, fl.getPaddingTop() + fl.getPaddingBottom(), dimenH);
 		} else {
-			specH = getChildMeasureSpec(MeasureSpec.makeMeasureSpec(myHeight, MeasureSpec.EXACTLY), 0, dimenH);
+			specH = getChildMeasureSpec(MeasureSpec.makeMeasureSpec(fl.myHeight, MeasureSpec.EXACTLY), 0, dimenH);
 		}
 		child.measure(specW, specH);
 		lp.mMeasuredWidth = child.getMeasuredWidth();
@@ -685,7 +692,7 @@ public class FlexLayout extends ViewGroup {
 		return true;
 	}
 
-	private boolean onlyRefSelf(RPN exp) {
+	static boolean onlyRefSelf(RPN exp) {
 		if (exp != null) {
 			for (Object obj : exp.list) {
 				if (obj instanceof Ref) {
@@ -1004,16 +1011,56 @@ public class FlexLayout extends ViewGroup {
 			return (float) Math.pow(a, b);
 		}
 	};
-	public static final Operator X_COND1 = new Operator("?", 2, Operator.ASSOC_RIGHT, 1, 0) {
+	static final Operator X_COND1 = new Operator("?", 2, Operator.ASSOC_RIGHT, 1, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
 			return a;
 		}
 	};
-	public static final Operator X_COND2 = new Operator(":", 1, Operator.ASSOC_LEFT, 3, 0) {
+	static final Operator X_COND2 = new Operator(":", 1, Operator.ASSOC_LEFT, 3, 0) {
 		@Override
 		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
 			return Float.NaN;
+		}
+	};
+	static final Operator X_MATCH_PARENT = new Operator("match_parent", 0, 0, 0, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			if (xy == 0) {
+				if (fl.myWidth != -1) {
+					return fl.myWidth;
+				}
+				return Float.NaN;
+			} else {
+				if (fl.myHeight != -1) {
+					return fl.myHeight;
+				}
+				return Float.NaN;
+			}
+		}
+	};
+	static final Operator X_FILL_PARENT = new Operator("fill_parent", 0, 0, 0, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			return X_MATCH_PARENT.eval(fl, index, xy, a, b);
+		}
+	};
+	static final Operator X_WRAP_CONTENT = new Operator("wrap_content", 0, 0, 0, 0) {
+		@Override
+		public float eval(FlexLayout fl, int index, int xy, float a, float b) {
+			View child = fl.getChildAt(index);
+			LayoutParams lp = (LayoutParams) child.getLayoutParams();
+			if (xy == 0) {
+				if (lp.mMeasuredWidth == -1) {
+					measureChild(fl, child, lp, LayoutParams.WRAP_CONTENT, lp.height);
+				}
+				return lp.mMeasuredWidth == -1 ? Float.NaN : lp.mMeasuredWidth;
+			} else {
+				if (lp.mMeasuredHeight == -1) {
+					measureChild(fl, child, lp, lp.width, LayoutParams.WRAP_CONTENT);
+				}
+				return lp.mMeasuredHeight == -1 ? Float.NaN : lp.mMeasuredHeight;
+			}
 		}
 	};
 
@@ -1022,7 +1069,8 @@ public class FlexLayout extends ViewGroup {
 			BL, BR, COMMA,
 			U_SP, U_DP, U_DIP, U_PX, U_PT, U_MM, U_IN,
 			F_MAX, F_MIN, F_ROUND, F_CEIL, F_FLOOR, F_ABS, F_MOD, F_POW,
-			X_COND1, X_COND2};
+			X_COND1, X_COND2,
+			X_MATCH_PARENT, X_FILL_PARENT, X_WRAP_CONTENT};
 
 	static class Ref {
 
@@ -1494,6 +1542,9 @@ public class FlexLayout extends ViewGroup {
 						if (!stack.empty() && (stack.peek().flag & Operator.FLAG_FUNCTION) != 0) {
 							queue.add(stack.pop());
 						}
+					} else if (op.argc == 0) {
+						// func(), wrap_content, match_parent
+						queue.add(op);
 					} else {
 						while (!stack.empty()) {
 							Operator o2 = stack.peek();
