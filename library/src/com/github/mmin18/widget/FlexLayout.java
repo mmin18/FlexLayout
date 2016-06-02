@@ -1053,11 +1053,13 @@ public class FlexLayout extends ViewGroup {
 			if (xy == 0) {
 				if (lp.mMeasuredWidth == -1) {
 					measureChild(fl, child, lp, LayoutParams.WRAP_CONTENT, lp.height);
+					lp.mMeasuredHeight = -1;
 				}
 				return lp.mMeasuredWidth == -1 ? Float.NaN : lp.mMeasuredWidth;
 			} else {
 				if (lp.mMeasuredHeight == -1) {
 					measureChild(fl, child, lp, lp.width, LayoutParams.WRAP_CONTENT);
+					lp.mMeasuredWidth = -1;
 				}
 				return lp.mMeasuredHeight == -1 ? Float.NaN : lp.mMeasuredHeight;
 			}

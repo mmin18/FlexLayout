@@ -15,6 +15,7 @@
 
 	<TextView
 		android:layout_height="wrap_content"
+		android:background="@color/color1"
 		android:singleLine="true"
 		android:text="Short text"
 		app:layout_left="10dp"
@@ -30,9 +31,10 @@
 		app:layout_left="prev.right"/>
 
 	<TextView
-		android:layout_height="wrap_content"
-		android:singleLine="true"
-		android:text="Long text long text long text long text long text long text long text long text long text long text"
+		app:layout_height="wrap_content"
+		android:background="@color/color2"
+		android:ellipsize="end"
+		android:text="Long text long text long text long text long text long text long text long text long text long text long text END"
 		app:layout_left="10dp"
 		app:layout_top="prev.bottom+20dp"
 		app:layout_width="min(wrap_content,100%-this.left-next.width)"/>
