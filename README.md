@@ -19,7 +19,7 @@ Add dependencies in your `build.gradle`:
 
 ```groovy
 	dependencies {
-	    compile 'com.github.mmin18:flexlayout:1.2.3'
+	    compile 'com.github.mmin18:flexlayout:1.2.4'
 	}
 ```
 
@@ -203,6 +203,10 @@ You can check the layout xml files [here](https://github.com/Piasy/AndroidPlaygr
 FlexLayout usually takes longer to inflate, but it's equally fast in measure and layout. Normally you use less hierarchy and views than RelativeLayout or LinearLayout, so the overall time spend is competitively, especially when comes to complex layouts.
 
 # Changelog
+
+### 1.2.4 (2016-6-02)
+
+Fix #8, TextView clipped issue with wrap_content expression.
 
 ### 1.2.3 (2016-4-25)
 
