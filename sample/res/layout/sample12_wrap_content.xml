@@ -14,6 +14,7 @@
 		app:layout_top="20dp"/>
 
 	<TextView
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="@color/color1"
 		android:singleLine="true"
@@ -31,6 +32,8 @@
 		app:layout_left="prev.right"/>
 
 	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		app:layout_height="wrap_content"
 		android:background="@color/color2"
 		android:ellipsize="end"
