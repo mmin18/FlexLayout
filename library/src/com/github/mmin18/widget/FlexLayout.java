@@ -137,6 +137,22 @@ public class FlexLayout extends ViewGroup {
 				co++;
 			if (co < 1) {
 				throw new IllegalArgumentException("no LayoutParams in layout_left|layout_right|layout_centerX|layout_width");
+			} else if (co > 2) {
+				// I should just throw a IllegalArgumentException if there is both left, right and width defined
+				// But some people insist to do it, so I just set width UNSPECIFIED to solve this problem
+				// The rule is:
+				//   If you defined left and right, centerX and width will be ignored
+				//   Or if you defined centerX and width, left and right will be ignored
+				//   Otherwise the logic is too wired I will just throw a exception
+				if (this.left != null && this.right != null) {
+					this.width2 = null;
+					this.width = LayoutParams.UNSPECIFIED;
+				} else if (this.centerX != null && (this.width2 != null || this.width != LayoutParams.UNSPECIFIED)) {
+					this.left = null;
+					this.right = null;
+				} else {
+					throw new IllegalArgumentException("too many restriction on LayoutParams");
+				}
 			}
 			co = 0;
 			if (this.top != null)
@@ -149,6 +165,17 @@ public class FlexLayout extends ViewGroup {
 				co++;
 			if (co < 1) {
 				throw new IllegalArgumentException("no LayoutParams in layout_top|layout_bottom|layout_centerY|layout_height");
+			} else if (co > 2) {
+				// Same story on the Y asix
+				if (this.top != null && this.bottom != null) {
+					this.height2 = null;
+					this.height = LayoutParams.UNSPECIFIED;
+				} else if (this.centerY != null && (this.height2 != null || this.height != LayoutParams.UNSPECIFIED)) {
+					this.top = null;
+					this.bottom = null;
+				} else {
+					throw new IllegalArgumentException("too many restriction on LayoutParams");
+				}
 			}
 		}
 
