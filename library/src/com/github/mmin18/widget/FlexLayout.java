@@ -3,6 +3,7 @@ package com.github.mmin18.widget;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -49,6 +50,18 @@ public class FlexLayout extends ViewGroup {
 			if (EDIT_MODE_ID_MAP == null) {
 				EDIT_MODE_ID_MAP = new HashMap<String, Integer>();
 			}
+		}
+	}
+
+	boolean isRtl() {
+
+		// Arabic RTL support. Simply flip everything from right to left
+		// Enabled if you set android:supportsRtl="true" in AndroidManifest.xml
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			return getLayoutDirection() == LAYOUT_DIRECTION_RTL;
+		} else {
+			return false;
 		}
 	}
 
@@ -746,8 +759,15 @@ public class FlexLayout extends ViewGroup {
 			View child = getChildAt(i);
 			if (child.getVisibility() != GONE) {
 				FlexLayout.LayoutParams lp = (FlexLayout.LayoutParams) child.getLayoutParams();
-				child.layout(paddingLeft + Math.round(lp.getLeft()), paddingTop + Math.round(lp.getTop()),
-						paddingLeft + Math.round(lp.getRight()), paddingTop + Math.round(lp.getBottom()));
+				if (isRtl()) {
+					// Arabic RTL support. Simply flip everything from right to left
+					int w = r - l;
+					child.layout(w - paddingLeft - Math.round(lp.getRight()), paddingTop + Math.round(lp.getTop()),
+							w - paddingLeft - Math.round(lp.getLeft()), paddingTop + Math.round(lp.getBottom()));
+				} else {
+					child.layout(paddingLeft + Math.round(lp.getLeft()), paddingTop + Math.round(lp.getTop()),
+							paddingLeft + Math.round(lp.getRight()), paddingTop + Math.round(lp.getBottom()));
+				}
 			}
 		}
 	}
