@@ -42,7 +42,7 @@ Remember the `app:layout_width` is different from `android:layout_width`<br>*xml
 
 	<Button
 		app:layout_left="10%"
-		app:layout_right="10%"
+		app:layout_right="90%"
 		app:layout_centerY="50%"
 		android:layout_height="wrap_content"
 		../>
