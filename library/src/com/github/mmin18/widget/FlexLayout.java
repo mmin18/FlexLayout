@@ -485,7 +485,7 @@ public class FlexLayout extends ViewGroup {
 			}
 		}
 
-		boolean ready = false;
+		boolean ready = count == 0;
 		for (int j = 0; j < count * 4; j++) {
 			int vCount = 0, invIndex = -1;
 			int calcCount = 0;
